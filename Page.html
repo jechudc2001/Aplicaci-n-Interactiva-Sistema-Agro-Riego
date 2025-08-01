@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riego Inteligente para Agricultores de Tacna - AgroTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9f0',
+                            100: '#dcf2dc',
+                            200: '#bce5bc',
+                            300: '#8fd48f',
+                            400: '#5cb85c',
+                            500: '#3d8b3d',
+                            600: '#2d6a2d',
+                            700: '#1f4f1f',
+                            800: '#1a3d1a',
+                            900: '#163316'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border: #e2e8f0;
+            --primary-green: #15803d;
+            --primary-green-dark: #166534;
+            --accent-orange: #ea580c;
+        }
+        
+        .dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --primary-green: #22c55e;
+            --primary-green-dark: #16a34a;
+            --accent-orange: #fb923c;
+        }
+        
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .theme-toggle::before {
+            transform: translateX(30px);
+        }
+        
+        .benefit-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .crop-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .crop-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-green);
+        }
+        
+        .testimonial-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .pulse-green {
+            animation: pulse-green 2s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .number-highlight {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 border-b backdrop-blur-lg" style="background: var(--bg-primary)/80; border-color: var(--border);">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                    <span class="text-white text-xl">🌱</span>
+                </div>
+                <div>
+                    <div class="text-xl font-bold" style="color: var(--primary-green);">AgroTech Tacna</div>
+                    <div class="text-sm" style="color: var(--text-secondary);">Riego Inteligente</div>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#beneficios" class="text-sm font-medium hover:text-green-600 transition-colors" style="color: var(--text-primary);">Beneficios</a>
+                <a href="#cultivos" class="text-sm font-medium hover:text-green-600 transition-colors" style="color: var(--text-primary);">Cultivos</a>
+                <a href="#testimonios" class="text-sm font-medium hover:text-green-600 transition-colors" style="color: var(--text-primary);">Testimonios</a>
+                <a href="#precios" class="text-sm font-medium hover:text-green-600 transition-colors" style="color: var(--text-primary);">Precios</a>
+                <div class="theme-toggle" id="theme-toggle" title="Cambiar tema"></div>
+            </div>
+            <div class="md:hidden flex items-center space-x-4">
+                <div class="theme-toggle" id="theme-toggle-mobile" title="Cambiar tema"></div>
+                <button id="mobile-menu-button" class="p-2 rounded-md" style="color: var(--text-primary);">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 border-t" style="border-color: var(--border);">
+            <a href="#beneficios" class="block py-3 font-medium" style="color: var(--text-primary);">Beneficios</a>
+            <a href="#cultivos" class="block py-3 font-medium" style="color: var(--text-primary);">Cultivos</a>
+            <a href="#testimonios" class="block py-3 font-medium" style="color: var(--text-primary);">Testimonios</a>
+            <a href="#precios" class="block py-3 font-medium" style="color: var(--text-primary);">Precios</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-20 md:py-32 relative overflow-hidden" style="background: var(--bg-primary);">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-orange-50 dark:from-green-900/10 dark:to-orange-900/10"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div class="inline-flex items-center px-4 py-2 rounded-full border mb-8" style="background: var(--bg-secondary); border-color: var(--border);">
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2 pulse-green"></span>
+                    <span class="text-sm font-medium" style="color: var(--text-secondary);">Especialmente para Tacna</span>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+                    <span style="color: var(--text-primary);">Ahorra Agua,</span><br>
+                    <span class="number-highlight">Duplica tu Cosecha</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed" style="color: var(--text-secondary);">
+                    Sistema de riego inteligente que te dice <strong>exactamente cuándo y cuánto regar</strong> 
+                    tu vid, olivo y frutales. Sin desperdiciar ni una gota de agua.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+                    <div class="p-6 rounded-2xl" style="background: var(--bg-secondary); border: 1px solid var(--border);">
+                        <div class="text-3xl font-bold number-highlight mb-2">40%</div>
+                        <div class="text-sm" style="color: var(--text-secondary);">Menos agua consumida</div>
+                    </div>
+                    <div class="p-6 rounded-2xl" style="background: var(--bg-secondary); border: 1px solid var(--border);">
+                        <div class="text-3xl font-bold number-highlight mb-2">25%</div>
+                        <div class="text-sm" style="color: var(--text-secondary);">Más producción</div>
+                    </div>
+                    <div class="p-6 rounded-2xl" style="background: var(--bg-secondary); border: 1px solid var(--border);">
+                        <div class="text-3xl font-bold number-highlight mb-2">S/2,400</div>
+                        <div class="text-sm" style="color: var(--text-secondary);">Ahorro mensual promedio</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+                    <a href="#precios" class="inline-block px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
+                        Ver Precios Especiales
+                    </a>
+                    <a href="tel:+51987654321" class="inline-block px-8 py-4 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold rounded-lg transition-all duration-300">
+                        Llamar Ahora
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beneficios Section -->
+        <section id="beneficios" class="py-20" style="background: var(--bg-secondary);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-6" style="color: var(--text-primary);">¿Por Qué Te Conviene?</h2>
+                    <p class="text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
+                        Deja de adivinar cuándo regar. Nuestro sistema te dice exactamente qué necesita tu cultivo.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.026 1.026.68 2.734-.76 3.112L4.174 21.176c-1.44.378-2.786-.968-2.408-2.408L2.344 3.232c.378-1.44 2.086-1.786 3.112-.76l5 5A2 2 0 0011 8.828V5.5L10 4.5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Ahorra Hasta 40% de Agua</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            No más riego por horario fijo. El sistema sabe si tu suelo está húmedo o seco y solo riega cuando es necesario.
+                        </p>
+                        <div class="text-green-600 font-semibold">Ahorro: S/800-1,200 mensual en agua</div>
+                    </div>
+                    
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Aumenta tu Producción</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            Riego preciso = plantas más sanas = más fruta por hectárea. Nuestros agricultores ven 15-25% más producción.
+                        </p>
+                        <div class="text-green-600 font-semibold">Ganancia extra: S/3,000-5,000 por cosecha</div>
+                    </div>
+                    
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Ahorra Tu Tiempo</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            No tienes que estar revisando cada campo. El sistema te avisa por WhatsApp cuando hay que regar o si hay problemas.
+                        </p>
+                        <div class="text-green-600 font-semibold">Ahorra: 3-4 horas diarias de trabajo</div>
+                    </div>
+                    
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Evita Pérdidas por Estrés</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            El sistema detecta si tus plantas están estresadas por falta o exceso de agua antes de que sea tarde.
+                        </p>
+                        <div class="text-green-600 font-semibold">Evita pérdidas: S/8,000-15,000 por temporada</div>
+                    </div>
+                    
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Alertas Automáticas</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            Te avisamos por WhatsApp si hay heladas, vientos fuertes, o si algún sensor no está funcionando.
+                        </p>
+                        <div class="text-green-600 font-semibold">Tranquilidad total: 24/7</div>
+                    </div>
+                    
+                    <div class="benefit-card p-8 rounded-2xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-2xl flex items-center justify-center mb-6">
+                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" style="color: var(--text-primary);">Reduce Costos de Energía</h3>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            Menos bombeo = menos electricidad. El riego eficiente puede reducir tus costos de energía hasta 30%.
+                        </p>
+                        <div class="text-green-600 font-semibold">Ahorro energético: S/400-600 mensual</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cultivos Específicos -->
+        <section id="cultivos" class="py-20" style="background: var(--bg-primary);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-6" style="color: var(--text-primary);">Perfecto Para Tus Cultivos de Tacna</h2>
+                    <p class="text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
+                        Configuraciones específicas para cada tipo de cultivo de nuestra región.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="crop-card p-8 rounded-2xl">
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">🍇</div>
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Vid / Uva</h3>
+                            <p class="text-sm" style="color: var(--text-secondary);">Variedades: Red Globe, Thompson, Italia</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Ahorro de agua:</span>
+                                <span class="font-semibold text-green-600">35-45%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Aumento producción:</span>
+                                <span class="font-semibold text-green-600">20-30%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Mejor calidad:</span>
+                                <span class="font-semibold text-green-600">Racimos más grandes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 rounded-lg" style="background: var(--bg-secondary);">
+                            <h4 class="font-semibold mb-2" style="color: var(--text-primary);">Beneficio Específico:</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">
+                                Control preciso en envero y maduración. Evita el estrés hídrico que reduce el tamaño de la uva.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <div class="text-2xl font-bold number-highlight">S/4,200</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Ganancia extra por hectárea/temporada</div>
+                        </div>
+                    </div>
+                    
+                    <div class="crop-card p-8 rounded-2xl">
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">🫒</div>
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Olivo</h3>
+                            <p class="text-sm" style="color: var(--text-secondary);">Variedades: Sevillana, Ascolana, Manzanilla</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Ahorro de agua:</span>
+                                <span class="font-semibold text-green-600">40-50%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Aumento producción:</span>
+                                <span class="font-semibold text-green-600">15-25%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Mejor aceite:</span>
+                                <span class="font-semibold text-green-600">Mayor acidez ideal</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 rounded-lg" style="background: var(--bg-secondary);">
+                            <h4 class="font-semibold mb-2" style="color: var(--text-primary);">Beneficio Específico:</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">
+                                Riego controlado durante el cuajado y llenado del fruto. Optimiza la calidad del aceite de oliva.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <div class="text-2xl font-bold number-highlight">S/3,800</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Ganancia extra por hectárea/temporada</div>
+                        </div>
+                    </div>
+                    
+                    <div class="crop-card p-8 rounded-2xl">
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-4">🥭</div>
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Frutales</h3>
+                            <p class="text-sm" style="color: var(--text-secondary);">Mango, Palta, Cítricos, Granado</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Ahorro de agua:</span>
+                                <span class="font-semibold text-green-600">30-40%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Aumento producción:</span>
+                                <span class="font-semibold text-green-600">25-35%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span style="color: var(--text-secondary);">Frutos más grandes:</span>
+                                <span class="font-semibold text-green-600">Calibre superior</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 rounded-lg" style="background: var(--bg-secondary);">
+                            <h4 class="font-semibold mb-2" style="color: var(--text-primary);">Beneficio Específico:</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">
+                                Riego diferenciado según etapa fenológica. Maximiza el tamaño y dulzor de los frutos.
+                            </p>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <div class="text-2xl font-bold number-highlight">S/5,500</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Ganancia extra por hectárea/temporada</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-16 text-center">
+                    <div class="inline-flex items-center px-6 py-3 rounded-full" style="background: var(--bg-secondary); border: 1px solid var(--border);">
+                        <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-semibold" style="color: var(--text-primary);">Configuraciones pre-programadas para cada cultivo de Tacna</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cómo Funciona -->
+        <section class="py-20" style="background: var(--bg-secondary);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-6" style="color: var(--text-primary);">¿Cómo Funciona? (Muy Simple)</h2>
+                    <p class="text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
+                        En 3 pasos tienes tu fundo funcionando inteligentemente.
+                    </p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-12">
+                        <div class="flex flex-col md:flex-row items-center gap-8">
+                            <div class="md:w-1/2">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">1</div>
+                                    <h3 class="text-2xl font-bold" style="color: var(--text-primary);">Instalamos Sensores</h3>
+                                </div>
+                                <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                                    Colocamos pequeños sensores en tu campo que miden:
+                                </p>
+                                <ul class="space-y-2" style="color: var(--text-secondary);">
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> Humedad del suelo</li>
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> Temperatura</li>
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> Clima local</li>
+                                </ul>
+                            </div>
+                            <div class="md:w-1/2">
+                                <div class="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 p-8 rounded-2xl">
+                                    <div class="text-6xl text-center mb-4">📡</div>
+                                    <p class="text-center font-semibold" style="color: var(--text-primary);">Sensores inteligentes en tu campo</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+                            <div class="md:w-1/2">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">2</div>
+                                    <h3 class="text-2xl font-bold" style="color: var(--text-primary);">Te Avisamos por WhatsApp</h3>
+                                </div>
+                                <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                                    Recibes mensajes simples como:
+                                </p>
+                                <div class="space-y-3">
+                                    <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500">
+                                        <p class="text-sm" style="color: var(--text-primary);">"🌱 Sector A necesita riego: 2 horas"</p>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
+                                        <p class="text-sm" style="color: var(--text-primary);">"☀️ Día caluroso: revisar a las 3pm"</p>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500">
+                                        <p class="text-sm" style="color: var(--text-primary);">"⚠️ Posible helada esta noche"</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2">
+                                <div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 p-8 rounded-2xl">
+                                    <div class="text-6xl text-center mb-4">📱</div>
+                                    <p class="text-center font-semibold" style="color: var(--text-primary);">Mensajes directos a tu celular</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col md:flex-row items-center gap-8">
+                            <div class="md:w-1/2">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl mr-4">3</div>
+                                    <h3 class="text-2xl font-bold" style="color: var(--text-primary);">Riegas Cuando Es Necesario</h3>
+                                </div>
+                                <p class="text-lg mb-4" style="color: var(--text-secondary);">
+                                    Ya no riegas por costumbre o calendario. Riegas exactamente cuando y cuanto necesita cada sector.
+                                </p>
+                                <div class="p-4 rounded-lg" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                                    <h4 class="font-semibold mb-2 text-green-600">Resultado:</h4>
+                                    <ul class="space-y-1 text-sm" style="color: var(--text-secondary);">
+                                        <li>• Plantas más sanas y productivas</li>
+                                        <li>• Menos enfermedades por exceso de agua</li>
+                                        <li>• Frutos de mejor calidad</li>
+                                        <li>• Ahorro real en costos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2">
+                                <div class="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 p-8 rounded-2xl">
+                                    <div class="text-6xl text-center mb-4">💧</div>
+                                    <p class="text-center font-semibold" style="color: var(--text-primary);">Riego perfecto, sin desperdicios</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section id="testimonios" class="py-20" style="background: var(--bg-primary);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-6" style="color: var(--text-primary);">Lo Que Dicen Nuestros Agricultores</h2>
+                    <p class="text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
+                        Casos reales de agricultores de Tacna que ya usan nuestro sistema.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="testimonial-card p-6 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">JR</div>
+                            <div class="ml-4">
+                                <h4 class="font-bold" style="color: var(--text-primary);">José Ramos</h4>
+                                <p class="text-sm" style="color: var(--text-secondary);">Viñedo - Pocollay</p>
+                            </div>
+                        </div>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            "Antes gastaba S/3,500 mensuales en agua. Ahora gasto S/2,200 y produzco 30% más uva. 
+                            El sistema me avisa exactamente cuándo regar cada sector."
+                        </p>
+                        <div class="text-green-600 font-semibold">Ahorro: S/1,300/mes + 30% más producción</div>
+                    </div>
+                    
+                    <div class="testimonial-card p-6 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">MC</div>
+                            <div class="ml-4">
+                                <h4 class="font-bold" style="color: var(--text-primary);">María Condori</h4>
+                                <p class="text-sm" style="color: var(--text-secondary);">Olivar - Sama</p>
+                            </div>
+                        </div>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            "Mis olivos nunca habían dado tanto fruto. El año pasado tuve la mejor cosecha en 15 años. 
+                            Y lo mejor es que me avisa por WhatsApp, muy fácil de usar."
+                        </p>
+                        <div class="text-green-600 font-semibold">Mejor cosecha en 15 años</div>
+                    </div>
+                    
+                    <div class="testimonial-card p-6 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">AF</div>
+                            <div class="ml-4">
+                                <h4 class="font-bold" style="color: var(--text-primary);">Alberto Flores</h4>
+                                <p class="text-sm" style="color: var(--text-secondary);">Mangos - Locumba</p>
+                            </div>
+                        </div>
+                        <p class="mb-4" style="color: var(--text-secondary);">
+                            "Instalé el sistema en marzo. En la última cosecha, mis mangos salieron más grandes y dulces. 
+                            Los compradores me pagan mejor precio por la calidad."
+                        </p>
+                        <div class="text-green-600 font-semibold">Mejor precio por calidad superior</div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center">
+                    <a href="tel:+51987654321" class="inline-block px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300">
+                        Hablar con un Agricultor que ya lo Usa
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Precios -->
+        <section id="precios" class="py-20" style="background: var(--bg-secondary);">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-6" style="color: var(--text-primary);">Precios Especiales para Tacna</h2>
+                    <p class="text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
+                        Inversión que se paga sola en menos de 6 meses con los ahorros.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <div class="p-8 rounded-2xl border-2 border-transparent" style="background: var(--bg-primary);">
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Básico</h3>
+                            <p style="color: var(--text-secondary);">Hasta 2 hectáreas</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <div class="text-4xl font-bold number-highlight mb-2">S/2,400</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Instalación completa</div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> 4 sensores de humedad
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> 2 sensores de temperatura
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Alertas por WhatsApp
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Configuración para tu cultivo
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Soporte técnico
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <a href="tel:+51987654321" class="w-full inline-block py-3 px-6 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold rounded-lg transition-all duration-300">
+                                Consultar
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 rounded-2xl border-2 border-green-600 relative" style="background: var(--bg-primary);">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <span class="bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold">MÁS POPULAR</span>
+                        </div>
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Profesional</h3>
+                            <p style="color: var(--text-secondary);">2 a 10 hectáreas</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <div class="text-4xl font-bold number-highlight mb-2">S/4,800</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Instalación completa</div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> 8 sensores de humedad
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> 4 sensores de temperatura
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Control por sectores
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Alertas avanzadas
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Reportes mensuales
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Soporte prioritario
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <a href="tel:+51987654321" class="w-full inline-block py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all duration-300">
+                                Contratar Ahora
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 rounded-2xl border-2 border-transparent" style="background: var(--bg-primary);">
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary);">Empresarial</h3>
+                            <p style="color: var(--text-secondary);">Más de 10 hectáreas</p>
+                        </div>
+                        <div class="text-center mb-6">
+                            <div class="text-4xl font-bold number-highlight mb-2">Consultar</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Precio personalizado</div>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Sensores ilimitados
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Control automatizado
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Integración con riego
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Dashboard web completo
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Capacitación del personal
+                            </li>
+                            <li class="flex items-center" style="color: var(--text-secondary);">
+                                <span class="text-green-600 mr-2">✓</span> Soporte 24/7
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <a href="tel:+51987654321" class="w-full inline-block py-3 px-6 border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold rounded-lg transition-all duration-300">
+                                Cotizar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="p-6 rounded-xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                            <div class="text-3xl mb-2">💳</div>
+                            <h4 class="font-bold mb-2" style="color: var(--text-primary);">Facilidades de Pago</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">Hasta 12 cuotas sin intereses</p>
+                        </div>
+                        <div class="p-6 rounded-xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                            <div class="text-3xl mb-2">🛠️</div>
+                            <h4 class="font-bold mb-2" style="color: var(--text-primary);">Instalación Incluida</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">Nuestro equipo va a tu fundo</p>
+                        </div>
+                        <div class="p-6 rounded-xl" style="background: var(--bg-primary); border: 1px solid var(--border);">
+                            <div class="text-3xl mb-2">🔧</div>
+                            <h4 class="font-bold mb-2" style="color: var(--text-primary);">Garantía 2 Años</h4>
+                            <p class="text-sm" style="color: var(--text-secondary);">Mantenimiento y repuestos incluidos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Final -->
+        <section class="py-20" style="background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold text-white mb-6">¿Listo Para Ahorrar Agua y Ganar Más?</h2>
+                <p class="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
+                    Únete a más de 150 agricultores de Tacna que ya están ahorrando dinero y aumentando su producción.
+                </p>
+                
+                <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center mb-12">
+                    <a href="tel:+51987654321" class="inline-block px-8 py-4 bg-white text-green-600 hover:bg-gray-100 font-semibold rounded-lg shadow-lg transition-all duration-300">
+                        📞 Llamar Ahora: +51 987 654 321
+                    </a>
+                    <a href="https://wa.me/51987654321?text=Hola,%20quiero%20información%20sobre%20el%20sistema%20de%20riego%20inteligente" class="inline-block px-8 py-4 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-lg shadow-lg transition-all duration-300">
+                        💬 WhatsApp
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto text-white">
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">⏰</span>
+                        <span>Instalación en 24 horas</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">🚀</span>
+                        <span>Funciona desde el primer día</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">✅</span>
+                        <span>Garantía de resultados</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12" style="background: var(--bg-secondary); border-top: 1px solid var(--border);">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                            <span class="text-white text-xl">🌱</span>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold" style="color: var(--primary-green);">AgroTech Tacna</div>
+                            <div class="text-sm" style="color: var(--text-secondary);">Riego Inteligente</div>
+                        </div>
+                    </div>
+                    <p class="text-sm mb-4" style="color: var(--text-secondary);">
+                        Ayudamos a los agricultores de Tacna a ahorrar agua y aumentar su producción 
+                        con tecnología inteligente y fácil de usar.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4" style="color: var(--text-primary);">Contacto</h4>
+                    <div class="space-y-2 text-sm" style="color: var(--text-secondary);">
+                        <p>📞 +51 987 654 321</p>
+                        <p>📧 info@agrotechtacna.com</p>
+                        <p>📍 Tacna, Perú</p>
+                        <p>🕒 Lun-Sáb: 8am-6pm</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4" style="color: var(--text-primary);">Zonas de Servicio</h4>
+                    <div class="space-y-1 text-sm" style="color: var(--text-secondary);">
+                        <p>• Tacna Centro</p>
+                        <p>• Pocollay</p>
+                        <p>• Sama</p>
+                        <p>• Locumba</p>
+                        <p>• La Yarada</p>
+                        <p>• Alto de la Alianza</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-8 mt-8 border-t text-center" style="border-color: var(--border);">
+                <p class="text-sm" style="color: var(--text-secondary);">
+                    &copy; 2025 AgroTech Tacna. Todos los derechos reservados. 
+                    Especialistas en riego inteligente para la agricultura de Tacna.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Functionality
+        class ThemeManager {
+            constructor() {
+                this.theme = localStorage.getItem('theme') || 'light';
+                this.init();
+            }
+
+            init() {
+                this.applyTheme();
+                this.bindEvents();
+            }
+
+            applyTheme() {
+                if (this.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                localStorage.setItem('theme', this.theme);
+            }
+
+            toggle() {
+                this.theme = this.theme === 'light' ? 'dark' : 'light';
+                this.applyTheme();
+            }
+
+            bindEvents() {
+                const toggleButtons = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+                toggleButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.toggle();
+                    });
+                });
+            }
+        }
+
+        // Mobile Menu
+        class MobileMenu {
+            constructor() {
+                this.button = document.getElementById('mobile-menu-button');
+                this.menu = document.getElementById('mobile-menu');
+                this.init();
+            }
+
+            init() {
+                if (this.button && this.menu) {
+                    this.button.addEventListener('click', () => {
+                        this.menu.classList.toggle('hidden');
+                    });
+                    
+                    // Close menu when clicking on links
+                    document.querySelectorAll('#mobile-menu a').forEach(link => {
+                        link.addEventListener('click', () => {
+                            this.menu.classList.add('hidden');
+                        });
+                    });
+                }
+            }
+        }
+
+        // Smooth Scroll
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new MobileMenu();
+            initSmoothScroll();
+        });
+    </script>
+</body>
+</html>
