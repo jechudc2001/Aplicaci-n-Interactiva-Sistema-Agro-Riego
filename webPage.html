@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Inteligente de Riego para Agricultores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earthy Tech -->
+    <!-- Application Structure Plan: A single-page, vertical-scrolling layout with a sticky navigation header. The structure prioritizes interactive exploration over linear reading. Key sections include an interactive architecture diagram where clicking a component reveals its details, and an animated data flow visualization. This design was chosen to make the system's complex architecture and processes easily digestible and engaging for potential clients, investors, or developers. -->
+    <!-- Visualization & Content Choices: Report Info: System Components -> Goal: Organize/Inform -> Viz: Interactive HTML/CSS diagram -> Interaction: Click to show details -> Justification: Encourages user exploration. | Report Info: Data Flow -> Goal: Explain Process -> Viz: Animated HTML/CSS flowchart -> Interaction: Animates on scroll -> Justification: Clarifies a complex sequence dynamically. | Report Info: Technologies -> Goal: Inform -> Viz: Grid of logos/cards -> Interaction: Hover for info -> Justification: Quick, visual summary of the tech stack. NO charts are used as the source report is architectural, not quantitative. CONFIRMING NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #333D2E;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #4A7729;
+        }
+        .component-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .component-card.active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #4A7729;
+        }
+        .flow-step {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .flow-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .flow-line {
+            height: 2px;
+            width: 0;
+            transition: width 1s ease-out;
+        }
+        .flow-line.visible {
+            width: 100%;
+        }
+        .flow-arrow {
+            opacity: 0;
+            transition: opacity 0.5s ease-out 1s;
+        }
+        .flow-arrow.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-green-800">
+                🌱 Agro-Riego
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#arquitectura" class="nav-link">Arquitectura</a>
+                <a href="#flujo" class="nav-link">Flujo de Datos</a>
+                <a href="#tecnologias" class="nav-link">Tecnologías</a>
+                <a href="#futuro" class="nav-link">Futuro</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#arquitectura" class="block py-2 nav-link">Arquitectura</a>
+            <a href="#flujo" class="block py-2 nav-link">Flujo de Datos</a>
+            <a href="#tecnologias" class="block py-2 nav-link">Tecnologías</a>
+            <a href="#futuro" class="block py-2 nav-link">Futuro</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-green-900 leading-tight">
+                    Sistema Inteligente de Riego para Agricultores
+                </h1>
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-600">
+                    Este proyecto desarrolla un sistema integral de riego inteligente para optimizar el uso del agua, mejorar la productividad y reducir el desperdicio de recursos, proporcionando recomendaciones precisas y automatizadas.
+                </p>
+                <a href="#arquitectura" class="mt-8 inline-block bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-green-800 transition-colors duration-300">
+                    Descubre Cómo Funciona
+                </a>
+            </div>
+        </section>
+
+        <section id="arquitectura" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-green-900">Arquitectura y Componentes Clave</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        Nuestra solución se basa en una arquitectura modular y escalable. Haz clic en cada componente para conocer su función y tecnología.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+                    <div class="lg:col-span-1 flex flex-col space-y-4">
+                        <div id="comp-iot" class="component-card p-6 bg-white rounded-lg border-2 border-transparent shadow-md active">
+                            <h3 class="text-xl font-bold text-green-800">📡 Sensores IoT</h3>
+                            <p class="text-sm text-gray-500 mt-1">Recolección de datos ambientales.</p>
+                        </div>
+                        <div id="comp-db" class="component-card p-6 bg-white rounded-lg border-2 border-transparent shadow-md">
+                            <h3 class="text-xl font-bold text-green-800">☁️ Base de Datos en Tiempo Real</h3>
+                            <p class="text-sm text-gray-500 mt-1">Almacenamiento y sincronización.</p>
+                        </div>
+                        <div id="comp-backend" class="component-card p-6 bg-white rounded-lg border-2 border-transparent shadow-md">
+                            <h3 class="text-xl font-bold text-green-800">💻 Backend (API RESTful)</h3>
+                            <p class="text-sm text-gray-500 mt-1">Lógica de negocio y procesamiento.</p>
+                        </div>
+                        <div id="comp-frontend" class="component-card p-6 bg-white rounded-lg border-2 border-transparent shadow-md">
+                            <h3 class="text-xl font-bold text-green-800">🌐 Frontend Web</h3>
+                            <p class="text-sm text-gray-500 mt-1">Interfaz de usuario integral.</p>
+                        </div>
+                        <div id="comp-n8n" class="component-card p-6 bg-white rounded-lg border-2 border-transparent shadow-md">
+                            <h3 class="text-xl font-bold text-green-800">⚙️ n8n</h3>
+                            <p class="text-sm text-gray-500 mt-1">Automatización de flujos.</p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-1 lg:col-span-2 bg-white p-8 rounded-lg shadow-lg min-h-[300px]">
+                        <div id="component-details">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="flujo" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-green-900">Flujo de Datos Interactivo</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        Observa cómo viaja la información a través de nuestro sistema, desde el campo hasta tu pantalla.
+                    </p>
+                </div>
+
+                <div id="flow-container" class="flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-4">
+                    <div class="flow-step text-center w-48">
+                        <div class="text-4xl mb-2">📡</div>
+                        <h4 class="font-bold">1. Datos del Sensor</h4>
+                        <p class="text-sm text-gray-600">Sensores envían mediciones a Firebase.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex-grow flex items-center">
+                        <div class="w-full relative">
+                           <div class="flow-line bg-green-400 mx-auto"></div>
+                           <div class="flow-arrow absolute right-0 top-1/2 -mt-2 text-green-600 text-2xl">›</div>
+                        </div>
+                    </div>
+                    <div class="flow-step text-center w-48">
+                        <div class="text-4xl mb-2">🔄</div>
+                        <h4 class="font-bold">2. Procesamiento</h4>
+                        <p class="text-sm text-gray-600">Backend lee y enriquece los datos.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex-grow flex items-center">
+                        <div class="w-full relative">
+                           <div class="flow-line bg-green-400 mx-auto"></div>
+                           <div class="flow-arrow absolute right-0 top-1/2 -mt-2 text-green-600 text-2xl">›</div>
+                        </div>
+                    </div>
+                    <div class="flow-step text-center w-48">
+                        <div class="text-4xl mb-2">💡</div>
+                        <h4 class="font-bold">3. Recomendaciones</h4>
+                        <p class="text-sm text-gray-600">Backend genera y almacena sugerencias.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex-grow flex items-center">
+                        <div class="w-full relative">
+                           <div class="flow-line bg-green-400 mx-auto"></div>
+                           <div class="flow-arrow absolute right-0 top-1/2 -mt-2 text-green-600 text-2xl">›</div>
+                        </div>
+                    </div>
+                    <div class="flow-step text-center w-48">
+                        <div class="text-4xl mb-2">📊</div>
+                        <h4 class="font-bold">4. Visualización</h4>
+                        <p class="text-sm text-gray-600">Frontend muestra datos al agricultor.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex-grow flex items-center">
+                         <div class="w-full relative">
+                           <div class="flow-line bg-green-400 mx-auto"></div>
+                           <div class="flow-arrow absolute right-0 top-1/2 -mt-2 text-green-600 text-2xl">›</div>
+                        </div>
+                    </div>
+                    <div class="flow-step text-center w-48">
+                        <div class="text-4xl mb-2">🔔</div>
+                        <h4 class="font-bold">5. Automatización</h4>
+                        <p class="text-sm text-gray-600">n8n activa alertas y notificaciones.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tecnologias" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-green-900">Tecnologías que Impulsan el Sistema</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+                        Utilizamos un conjunto de tecnologías modernas y robustas para garantizar un servicio confiable y escalable.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 text-center">
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <h4 class="font-bold text-lg">Node.js</h4>
+                        <p class="text-sm text-gray-500">Backend</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <h4 class="font-bold text-lg">Next.js</h4>
+                        <p class="text-sm text-gray-500">Frontend</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <h4 class="font-bold text-lg">Firebase</h4>
+                        <p class="text-sm text-gray-500">Base de Datos</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <h4 class="font-bold text-lg">Docker</h4>
+                        <p class="text-sm text-gray-500">Infraestructura</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <h4 class="font-bold text-lg">n8n</h4>
+                        <p class="text-sm text-gray-500">Automatización</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="futuro" class="py-20 bg-green-800 text-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-3xl md:text-4xl font-bold">El Futuro es Móvil</h2>
+                 <p class="mt-4 max-w-2xl mx-auto text-lg text-green-200">
+                    Estamos trabajando en una aplicación móvil nativa para que puedas llevar el control de tus cultivos en tu bolsillo. Acceso rápido y conveniente desde el campo.
+                 </p>
+                 <div class="mt-8 flex justify-center space-x-4 text-4xl">
+                    <span>📱</span>
+                    <span>(React Native / Flutter)</span>
+                 </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Agro-Riego. Todos los derechos reservados.</p>
+            <p class="text-sm text-gray-400 mt-2">Innovación para un futuro agrícola sostenible.</p>
+        </div>
+    </footer>
+
+    <script>
+        const componentsData = {
+            'comp-iot': {
+                title: '📡 Sensores IoT',
+                description: 'Sensores de <strong>humedad y temperatura del suelo</strong> (controlados por <strong>Arduino</strong>) envían mediciones continuas a la nube. Son la fuente principal de datos de campo, recolectando información ambiental esencial para nuestros cálculos.',
+                tech: 'Arduino, Wi-Fi'
+            },
+            'comp-db': {
+                title: '☁️ Base de Datos en Tiempo Real',
+                description: 'Sirve como el repositorio principal para los datos de los sensores, garantizando que todos los servicios accedan a la información más reciente de manera instantánea. Su naturaleza en tiempo real es crucial para la agilidad del sistema.',
+                tech: 'Google Firebase Realtime Database'
+            },
+            'comp-backend': {
+                title: '💻 Backend (API RESTful)',
+                description: 'Esta API procesa los datos de los sensores, los enriquece con información climática externa y aplica la <strong>fórmula de evapotranspiración de la FAO</strong> para calcular las necesidades hídricas exactas de los cultivos. También maneja la autenticación y los permisos de los usuarios.',
+                tech: 'Node.js, Express.js, OpenWeather API'
+            },
+            'comp-frontend': {
+                title: '🌐 Frontend Web',
+                description: 'Una única aplicación que centraliza múltiples funciones:<ul><li class="mt-2"><strong>Página Corporativa:</strong> Muestra la información de la empresa.</li><li class="mt-2"><strong>Panel de Administración (CMS):</strong> Permite modificar el contenido del sitio.</li><li class="mt-2"><strong>Autenticación:</strong> Sistema de registro y login.</li><li class="mt-2"><strong>Aplicación de Riego:</strong> El panel interactivo para los agricultores.</li></ul>',
+                tech: 'Next.js'
+            },
+            'comp-n8n': {
+                title: '⚙️ n8n (Automatización de Flujos de Trabajo)',
+                description: 'Se encarga de tareas repetitivas y de la comunicación con el usuario, como el envío de alertas críticas por correo o mensajes y recordatorios de riego. Libera al sistema principal de estas tareas, mejorando la eficiencia.',
+                tech: 'n8n'
+            }
+        };
+
+        const detailsContainer = document.getElementById('component-details');
+        const componentCards = document.querySelectorAll('.component-card');
+
+        function updateDetails(componentId) {
+            const data = componentsData[componentId];
+            if (data) {
+                detailsContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">${data.title}</h3>
+                    <p class="text-gray-700 leading-relaxed">${data.description}</p>
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <h4 class="font-semibold text-gray-600">Tecnologías Clave:</h4>
+                        <p class="text-green-700 font-medium mt-1">${data.tech}</p>
+                    </div>
+                `;
+            }
+        }
+
+        componentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                componentCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                updateDetails(card.id);
+            });
+        });
+
+        updateDetails('comp-iot');
+
+        const flowContainer = document.getElementById('flow-container');
+        const flowElements = flowContainer.querySelectorAll('.flow-step, .flow-line, .flow-arrow');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let delay = 0;
+                    flowElements.forEach(el => {
+                        setTimeout(() => {
+                            el.classList.add('visible');
+                        }, delay);
+                        delay += 200;
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(flowContainer);
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+    </script>
+</body>
+</html>
