@@ -1,12 +1,29 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "API de riego inteligente con Node.js, Express y Prisma",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node src/index.js",
+    "start": "node src/index.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:studio": "npx prisma studio",
+    "test": "node run-tests.js",
+    "test:controllers": "node test/test-controllers.js",
+    "test:api": "node test/test-api-endpoints.js",
+    "debug:db": "node debug/database-debug.js",
+    "test:all": "npm run debug:db && npm run test:controllers && npm run test:api"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "prisma": "^5.0.0"
+  }
 }

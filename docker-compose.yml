@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: agro-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: agrodb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: agro-backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/agrodb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+      - /app/node_modules  # Previene que node_modules del host sobrescriba los del contenedor
+    command: ["npm", "run", "dev"]
+
+volumes:
+  postgres_data:

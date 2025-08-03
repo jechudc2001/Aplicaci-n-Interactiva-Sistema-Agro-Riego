@@ -1,0 +1,106 @@
+🌱 COMANDOS RÁPIDOS - SISTEMA DE RIEGO INTELIGENTE
+=====================================================
+
+📋 PRERREQUISITOS:
+- Docker Desktop instalado
+- Docker Compose instalado
+
+🚀 INICIO RÁPIDO:
+================
+
+1. CLONAR Y ENTRAR AL PROYECTO:
+   git clone <tu-repositorio>
+   cd Aplicaci-n-Interactiva-Sistema-Agro-Riego
+
+2. CONFIGURAR VARIABLES DE ENTORNO:
+   Crear archivo: backend/.env
+   Contenido:
+   DATABASE_URL="postgresql://postgres:password@postgres:5432/agrodb"
+
+3. INICIAR SERVICIOS DOCKER:
+   docker-compose up -d
+
+4. VERIFICAR CONTENEDORES:
+   docker-compose ps
+
+5. CREAR TABLAS DE BASE DE DATOS:
+   docker-compose exec backend npx prisma migrate dev --name init
+
+6. VERIFICAR QUE TODO FUNCIONE:
+   docker-compose exec backend npm run test:all
+
+✅ ¡LISTO! El sistema está funcionando en http://localhost:3000
+
+🔧 COMANDOS ÚTILES:
+==================
+
+GESTIÓN DOCKER:
+---------------
+docker-compose up -d                    # Iniciar servicios
+docker-compose down                     # Detener servicios
+docker-compose ps                       # Ver estado de contenedores
+docker-compose logs backend             # Ver logs del backend
+docker-compose logs postgres            # Ver logs de la base de datos
+docker-compose build --no-cache backend # Reconstruir imagen
+
+BASE DE DATOS:
+--------------
+docker-compose exec backend npx prisma migrate dev    # Ejecutar migraciones
+docker-compose exec backend npx prisma studio         # Abrir Prisma Studio
+docker-compose exec backend npx prisma migrate reset  # Resetear base de datos
+docker-compose exec backend npx prisma generate       # Regenerar Prisma Client
+
+TESTING Y DEBUGGING:
+-------------------
+docker-compose exec backend npm run test:all          # Todos los tests
+docker-compose exec backend npm run debug:db          # Debugging de BD
+docker-compose exec backend npm run test:controllers  # Tests de controllers
+docker-compose exec backend npm run test:api          # Tests de API
+
+🔍 TROUBLESHOOTING:
+==================
+
+PROBLEMA: Contenedor se reinicia constantemente
+SOLUCIÓN: docker-compose logs backend
+
+PROBLEMA: Error de conexión a base de datos
+SOLUCIÓN: docker-compose logs postgres
+
+PROBLEMA: Error de Prisma Client
+SOLUCIÓN: docker-compose exec backend npx prisma generate
+
+PROBLEMA: Error de migraciones
+SOLUCIÓN: docker-compose exec backend npx prisma migrate reset
+
+📊 VERIFICACIÓN RÁPIDA:
+======================
+
+1. Verificar contenedores:
+   docker-compose ps
+
+2. Verificar API:
+   curl http://localhost:3000/parcelas
+
+3. Verificar base de datos:
+   docker-compose exec backend npm run debug:db
+
+4. Verificar tests:
+   docker-compose exec backend npm run test:all
+
+🎯 RESULTADO ESPERADO:
+=====================
+
+✅ Contenedores: agro-backend (Up), agro-postgres (Up)
+✅ API: Respondiendo en http://localhost:3000
+✅ Base de datos: Todas las tablas creadas
+✅ Tests: 43/43 endpoints funcionando, 100% éxito
+
+📞 EN CASO DE PROBLEMAS:
+========================
+
+1. Verificar que Docker esté corriendo
+2. Ejecutar: docker-compose logs
+3. Revisar variables de entorno
+4. Ejecutar tests para verificar estado
+
+¡El sistema está listo para desarrollo! 🚀 

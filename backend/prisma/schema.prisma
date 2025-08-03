@@ -1,0 +1,91 @@
+// schema.prisma
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Parcela {
+  id             Int              @id @default(autoincrement())
+  nombre         String
+  ubicacion      String
+  filas          Int
+  columnas       Int
+  fecha_siembra  DateTime
+  cultivo_id     String
+  epoca_id       String
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  arboles        Arbol[]
+  horariosRiego  HorarioRiego[]
+  historialRiego HistorialRiego[]
+  alertas        Alerta[]
+}
+
+model Arbol {
+  id                Int       @id @default(autoincrement())
+  parcela_id        Int
+  fila              Int
+  columna           Int
+  estado            String?
+  comentario_estado String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  parcela           Parcela   @relation(fields: [parcela_id], references: [id])
+  sensores          Sensor[]
+  alertas           Alerta[]
+}
+
+model Sensor {
+  id             Int       @id @default(autoincrement())
+  arbol_id       Int
+  tipo           String
+  firebase_path  String
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  arbol          Arbol     @relation(fields: [arbol_id], references: [id])
+  alertas        Alerta[]
+}
+
+model HorarioRiego {
+  id           Int       @id @default(autoincrement())
+  parcela_id   Int
+  dias_semana  Json
+  hora_riego   String
+  activo       Boolean
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  parcela      Parcela   @relation(fields: [parcela_id], references: [id])
+}
+
+model HistorialRiego {
+  id                  Int       @id @default(autoincrement())
+  parcela_id          Int
+  litros_recomendados Float
+  litros_aplicados    Float?
+  fecha_hora_riego    DateTime
+  estado              String
+  created_at          DateTime  @default(now())
+  parcela             Parcela   @relation(fields: [parcela_id], references: [id])
+}
+
+model Alerta {
+  id           Int       @id @default(autoincrement())
+  tipo         String
+  mensaje      String
+  severidad    String
+  sensor_id    Int?
+  arbol_id     Int?
+  parcela_id   Int?
+  resuelta     Boolean
+  fecha_hora   DateTime
+  created_at   DateTime  @default(now())
+
+  sensor       Sensor?   @relation(fields: [sensor_id], references: [id])
+  arbol        Arbol?    @relation(fields: [arbol_id], references: [id])
+  parcela      Parcela?  @relation(fields: [parcela_id], references: [id])
+}
